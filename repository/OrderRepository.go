@@ -8,15 +8,15 @@ import (
 	"log"
 )
 
-type ProductRepository struct {
+type OrderRepository struct {
 	db *sql.DB
 }
 
-func NewProductRepository(db *sql.DB) *ProductRepository {
-	return &ProductRepository{db}
+func NewOrderRepository(db *sql.DB) *OrderRepository {
+	return &OrderRepository{db}
 }
 
-func (u *ProductRepository) CheckoutItems(param request.OrderRequest) ([]model.Product, error) {
+func (u *OrderRepository) CheckoutItems(param request.OrderRequest) ([]model.Product, error) {
 	var products []model.Product
 	var productStockDeducted []model.ProductStockDeducted
 	tx, err := u.db.Begin()
@@ -41,7 +41,7 @@ func (u *ProductRepository) CheckoutItems(param request.OrderRequest) ([]model.P
 		productStockDeducted = append(productStockDeducted, deducted)
 	}
 
-	if len(productStockDeducted) < 0 {
+	if len(productStockDeducted) == 0 {
 		tx.Rollback()
 		log.Fatal(err)
 		return nil, errors.New("Stock not found")
@@ -74,4 +74,51 @@ func (u *ProductRepository) CheckoutItems(param request.OrderRequest) ([]model.P
 	tx.Commit()
 
 	return products, nil
+}
+
+func (u *OrderRepository) ReleaseUnusedStock() error {
+	var productStockCarts []model.ProductStockCart
+	tx, err := u.db.Begin()
+	if err != nil {
+		log.Fatal(err)
+		return err
+	}
+	queryUnusedCart := "SELECT\n    id,\n    users_id,\n    product_id,\n    quantity\nFROM cart\nWHERE\n    is_paid IS FALSE AND\n    released_stock IS FALSE AND\n    updated_at + hold_duration < now()"
+	rows, err := u.db.Query(queryUnusedCart)
+	if err != nil {
+		log.Fatal(err)
+		return err
+	}
+
+	for rows.Next() {
+		var deducted model.ProductStockCart
+		if err := rows.Scan(&deducted.ID, &deducted.UsersId, &deducted.ProductId, &deducted.Quantity); err != nil {
+			tx.Rollback()
+			log.Fatal(err)
+			return err
+		}
+		productStockCarts = append(productStockCarts, deducted)
+	}
+
+	for _, cart := range productStockCarts {
+		queryUpdateStock := "UPDATE product_stock SET stock_quantity = $2 WHERE id = $1"
+		_, err = tx.Exec(queryUpdateStock, cart.ProductId, cart.Quantity)
+		if err != nil {
+			tx.Rollback()
+			log.Fatal(err)
+			return err
+		}
+
+		queryUpdateCart := "UPDATE cart SET released_stock = TRUE WHERE id = $1"
+		_, err = tx.Exec(queryUpdateCart, cart.ID)
+		if err != nil {
+			tx.Rollback()
+			log.Fatal(err)
+			return err
+		}
+	}
+
+	tx.Commit()
+
+	return nil
 }

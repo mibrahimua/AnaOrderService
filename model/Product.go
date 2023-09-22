@@ -18,3 +18,10 @@ type ProductStockDeducted struct {
 	DeductedRemaining string `json:"deducted_remaining"`
 	IsValid           bool   `json:"is_valid"`
 }
+
+type ProductStockCart struct {
+	ID        int    `json:"id"`
+	UsersId   string `json:"users_id"`
+	ProductId string `json:"product_id"`
+	Quantity  string `json:"quantity"`
+}

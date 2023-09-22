@@ -6,6 +6,7 @@ import (
 	"AnaOrderService/docs"
 	"AnaOrderService/repository"
 	"AnaOrderService/service"
+	"AnaOrderService/task"
 	_ "fmt"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -17,8 +18,8 @@ import (
 func main() {
 	db := config.GetDB()
 
-	productRepository := repository.NewProductRepository(db)
-	productService := service.NewOrderService(productRepository)
+	orderRepository := repository.NewOrderRepository(db)
+	productService := service.NewOrderService(orderRepository)
 	productController := controller.NewOrderController(productService)
 
 	docs.SwaggerInfo.Title = "Ana Store - Environment: "
@@ -27,6 +28,8 @@ func main() {
 	docs.SwaggerInfo.Host = os.Getenv("swagger_host")
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 	router := gin.Default()
+
+	go task.SyncReleasedUnusedStocks(orderRepository)
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
