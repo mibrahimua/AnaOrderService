@@ -1,0 +1,44 @@
+definitions:
+  model.Product:
+    properties:
+      category:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      price:
+        type: number
+      stock_quantity:
+        type: integer
+      theme:
+        type: string
+    type: object
+  request.ProductRequest:
+    properties:
+      name:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /product:
+    post:
+      description: Get User By Id
+      parameters:
+      - description: product_name
+        in: body
+        name: product_name
+        schema:
+          $ref: '#/definitions/request.ProductRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Product'
+      summary: Get User By Id
+swagger: "2.0"

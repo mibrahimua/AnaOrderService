@@ -1,0 +1,71 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/product": {
+            "post": {
+                "description": "Get User By Id",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get User By Id",
+                "parameters": [
+                    {
+                        "description": "product_name",
+                        "name": "product_name",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/request.ProductRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Product"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "model.Product": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "stock_quantity": {
+                    "type": "integer"
+                },
+                "theme": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.ProductRequest": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-user-service
+  labels:
+    app: user
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user
+  template:
+    metadata:
+      labels:
+        app: user
+    spec:
+      containers:
+        - name: user-container
+          image: localhost:5000/user-service
+          env:
+            - name: GIN_PROFILE
+              valueFrom:
+                secretKeyRef:
+                  name: user-service-secret
+                  key: GIN_PROFILE
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: user-service-secret
+type: Opaque
+data:
+  GIN_PROFILE: bG9jYWw=
+#  GIN_PROFILE: bG9jYWwy
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pod-user-service
+spec:
+  selector:
+    app: user
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
