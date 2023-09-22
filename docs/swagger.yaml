@@ -16,15 +16,17 @@ definitions:
       theme:
         type: string
     type: object
-  request.ProductRequest:
+  request.OrderRequest:
     properties:
-      name:
-        type: string
+      product_id:
+        type: integer
+      quantity:
+        type: integer
     type: object
 info:
   contact: {}
 paths:
-  /product:
+  /order/checkout:
     post:
       description: Get User By Id
       parameters:
@@ -32,7 +34,7 @@ paths:
         in: body
         name: product_name
         schema:
-          $ref: '#/definitions/request.ProductRequest'
+          $ref: '#/definitions/request.OrderRequest'
       produces:
       - application/json
       responses:

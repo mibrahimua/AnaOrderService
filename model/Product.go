@@ -9,3 +9,12 @@ type Product struct {
 	Theme         string  `json:"theme"`
 	StockQuantity int     `json:"stock_quantity"`
 }
+
+type ProductStockDeducted struct {
+	ProductStockId    int    `json:"product_stock_id"`
+	ProductId         string `json:"product_id"`
+	WarehouseId       string `json:"warehouse_id"`
+	StockQuantity     string `json:"stock_quantity"`
+	DeductedRemaining string `json:"deducted_remaining"`
+	IsValid           bool   `json:"is_valid"`
+}

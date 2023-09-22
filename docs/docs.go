@@ -16,7 +16,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/product": {
+        "/order/checkout": {
             "post": {
                 "description": "Get User By Id",
                 "produces": [
@@ -29,7 +29,7 @@ const docTemplate = `{
                         "name": "product_name",
                         "in": "body",
                         "schema": {
-                            "$ref": "#/definitions/request.ProductRequest"
+                            "$ref": "#/definitions/request.OrderRequest"
                         }
                     }
                 ],
@@ -71,11 +71,14 @@ const docTemplate = `{
                 }
             }
         },
-        "request.ProductRequest": {
+        "request.OrderRequest": {
             "type": "object",
             "properties": {
-                "name": {
-                    "type": "string"
+                "product_id": {
+                    "type": "integer"
+                },
+                "quantity": {
+                    "type": "integer"
                 }
             }
         }

@@ -18,11 +18,11 @@ func NewOrderController(userService *service.OrderService) *OrderController {
 // @Summary		Get User By Id
 // @Description	Get User By Id
 // @Produce		json
-// @Param product_name body request.ProductRequest false "product_name"
+// @Param product_name body request.OrderRequest false "product_name"
 // @Success		200	{object} model.Product
-// @Router			/product [post]
+// @Router			/order/checkout [post]
 func (uc *OrderController) CheckoutItems(c *gin.Context) {
-	request := request.ProductRequest{}
+	request := request.OrderRequest{}
 	if err := c.ShouldBindJSON(&request); err != nil {
 		c.JSON(400, response.Response{
 			Status:  "error",
@@ -30,7 +30,7 @@ func (uc *OrderController) CheckoutItems(c *gin.Context) {
 		})
 	}
 
-	data, err := uc.orderService.CheckoutItems(request.Name)
+	data, err := uc.orderService.CheckoutItems(request)
 	if err != nil {
 		c.JSON(400, response.Response{
 			Status:  "error",

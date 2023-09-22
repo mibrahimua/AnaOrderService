@@ -3,6 +3,7 @@ package service
 import (
 	"AnaOrderService/model"
 	"AnaOrderService/repository"
+	"AnaOrderService/request"
 )
 
 type OrderService struct {
@@ -13,8 +14,8 @@ func NewOrderService(userRepository *repository.ProductRepository) *OrderService
 	return &OrderService{userRepository}
 }
 
-func (us *OrderService) CheckoutItems(productName string) ([]model.Product, error) {
-	return us.productRepository.CheckoutItems(productName)
+func (us *OrderService) CheckoutItems(param request.OrderRequest) ([]model.Product, error) {
+	return us.productRepository.CheckoutItems(param)
 }
 
 /**
