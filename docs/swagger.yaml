@@ -22,6 +22,8 @@ definitions:
         type: integer
       quantity:
         type: integer
+      users_id:
+        type: integer
     type: object
 info:
   contact: {}

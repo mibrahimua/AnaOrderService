@@ -63,6 +63,14 @@ func (u *ProductRepository) CheckoutItems(param request.OrderRequest) ([]model.P
 		}
 	}
 
+	queryInsertCart := "INSERT INTO cart (users_id, product_id, quantity) VALUES ($1, $2, $3)"
+	_, err = tx.Exec(queryInsertCart, param.UserId, param.ProductID, param.Quantity)
+	if err != nil {
+		tx.Rollback()
+		log.Fatal(err)
+		return nil, err
+	}
+
 	tx.Commit()
 
 	return products, nil

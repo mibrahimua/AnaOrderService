@@ -79,6 +79,9 @@ const docTemplate = `{
                 },
                 "quantity": {
                     "type": "integer"
+                },
+                "users_id": {
+                    "type": "integer"
                 }
             }
         }
