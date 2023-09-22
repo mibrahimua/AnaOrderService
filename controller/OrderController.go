@@ -15,8 +15,8 @@ func NewOrderController(userService *service.OrderService) *OrderController {
 	return &OrderController{userService}
 }
 
-// @Summary		Get User By Id
-// @Description	Get User By Id
+// @Summary		Checkout items
+// @Description	Checkout items
 // @Produce		json
 // @Param product_name body request.OrderRequest false "product_name"
 // @Success		200	{object} model.Product

@@ -18,11 +18,11 @@ const docTemplate = `{
     "paths": {
         "/order/checkout": {
             "post": {
-                "description": "Get User By Id",
+                "description": "Checkout items",
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Get User By Id",
+                "summary": "Checkout items",
                 "parameters": [
                     {
                         "description": "product_name",

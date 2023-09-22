@@ -30,7 +30,7 @@ info:
 paths:
   /order/checkout:
     post:
-      description: Get User By Id
+      description: Checkout items
       parameters:
       - description: product_name
         in: body
@@ -44,5 +44,5 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/model.Product'
-      summary: Get User By Id
+      summary: Checkout items
 swagger: "2.0"
